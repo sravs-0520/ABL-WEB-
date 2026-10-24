@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pocket Bazaar – Online Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== 1. COLORS & BASICS ========== */
+    /* Change these colors to restyle the whole site */
+    :root {
+      --ink: #1f2a5c;      /* deep blue for text */
+      --mango: #ffb400;    /* yellow accent */
+      --chilli: #e8433c;   /* red for discounts */
+      --paper: #fff8ec;    /* page background */
+      --mint: #c4ead8;     /* soft green */
+      --white: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "DM Sans", Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    h1, h2, h3, .logo {
+      font-family: "Bricolage Grotesque", Georgia, serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+    /* ========== 2. NAVIGATION BAR ========== */
+    .navbar {
+      background: var(--ink);
+      color: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .navbar .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+    .logo { font-size: 1.5rem; font-weight: 800; }
+    .logo span { color: var(--mango); }
+
+    .nav-links { display: flex; gap: 22px; list-style: none; }
+    .nav-links a:hover { color: var(--mango); }
+
+    .search {
+      flex: 1;
+      max-width: 280px;
+      padding: 9px 14px;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+
+    .cart-btn {
+      background: var(--mango);
+      color: var(--ink);
+      font-weight: 700;
+      padding: 9px 16px;
+      border-radius: 999px;
+    }
+
+    /* ========== 3. SCROLLING PROMO STRIP ========== */
+    .strip {
+      background: var(--mango);
+      color: var(--ink);
+      font-weight: 700;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 8px 0;
+    }
+    .strip p {
+      display: inline-block;
+      padding-left: 100%;
+      animation: slide 22s linear infinite;
+    }
+    @keyframes slide {
+      to { transform: translateX(-100%); }
+    }
+
+    /* ========== 4. HERO ========== */
+    .hero { padding: 56px 0 40px; }
+    .hero .wrap {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 1.05;
+      font-weight: 800;
+    }
+    .hero p { margin: 16px 0 24px; max-width: 420px; font-size: 1.1rem; }
+
+    .btn {
+      display: inline-block;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-weight: 700;
+      border: 2px solid var(--ink);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .btn:hover { transform: translateY(-3px); }
+    .btn.light { background: transparent; color: var(--ink); margin-left: 8px; }
+
+    /* Big price-tag illustration */
+    .tag-art {
+      background: var(--mint);
+      border-radius: 28px;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+    }
+    .tag-art .big-emoji { font-size: 6rem; }
+    .tag-art .sticker {
+      position: absolute;
+      top: -16px;
+      right: -10px;
+      background: var(--chilli);
+      color: var(--white);
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      line-height: 1.1;
+      transform: rotate(12deg);
+      border: 3px dashed var(--white);
+    }
+
+    /* ========== 5. CATEGORIES ========== */
+    .section-title { font-size: 1.8rem; margin-bottom: 18px; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+    .chip {
+      background: var(--white);
+      border: 2px solid var(--ink);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+    .chip:hover, .chip.active { background: var(--ink); color: var(--paper); }
+
+    /* ========== 6. PRODUCT GRID ========== */
+    /* auto-fill makes the grid responsive without media queries */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 5px 5px 0 var(--ink);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .card .pic {
+      font-size: 4.5rem;
+      text-align: center;
+      padding: 26px 0;
+      position: relative;
+    }
+    /* A different background color for each product picture */
+    .bg1 { background: #ffe3a3; }
+    .bg2 { background: #c4ead8; }
+    .bg3 { background: #ffd0d0; }
+    .bg4 { background: #cfe0ff; }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--chilli);
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      transform: rotate(-4deg);
+    }
+
+    .card .info { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+    .category { font-size: 0.85rem; color: #6a72a0; }
+    .card h3 { font-size: 1.15rem; margin: 2px 0 6px; }
+    .desc { font-size: 0.92rem; margin-bottom: 10px; flex: 1; }
+
+    .stars { color: var(--mango); letter-spacing: 2px; }
+    .stars small { color: var(--ink); letter-spacing: 0; font-size: 0.85rem; }
+
+    .price-row { display: flex; align-items: baseline; gap: 8px; margin: 8px 0 12px; }
+    .price { font-size: 1.5rem; font-weight: 800; font-family: "Bricolage Grotesque", sans-serif; }
+    .old-price { text-decoration: line-through; color: #8a8fb0; }
+
+    .buy {
+      background: var(--mango);
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .buy:hover { background: var(--ink); color: var(--mango); }
+
+    /* ========== 7. PROMO BANNERS ========== */
+    .banners {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 60px 0;
+    }
+    .banner {
+      border-radius: 22px;
+      padding: 34px 28px;
+      border: 2px solid var(--ink);
+    }
+    .banner h2 { font-size: 1.9rem; line-height: 1.1; margin-bottom: 8px; }
+    .banner.b1 { background: var(--chilli); color: var(--white); border-color: var(--chilli); }
+    .banner.b2 { background: var(--mint); }
+    .banner .btn { margin-top: 14px; }
+    .banner.b1 .btn { background: var(--white); color: var(--chilli); border-color: var(--white); }
+
+    /* ========== 8. FOOTER ========== */
+    footer {
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      padding: 34px 20px;
+      margin-top: 60px;
+    }
+    footer p { margin-top: 6px; opacity: 0.8; }
+
+    /* ========== 9. MOBILE SCREENS ========== */
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .hero .wrap { grid-template-columns: 1fr; }
+      .banners { grid-template-columns: 1fr; }
+      .btn.light { margin: 10px 0 0; }
+    }
+
+    /* Respect people who prefer no motion */
+    @media (prefers-reduced-motion: reduce) {
+      .strip p { animation: none; padding-left: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <header class="navbar">
+    <div class="wrap">
+      <a href="#" class="logo">Pocket<span>Bazaar</span></a>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#shop">Shop</a></li>
+        <li><a href="#deals">Deals</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <input class="search" type="search" placeholder="Search products">
+      <a href="#" class="cart-btn">Cart (0)</a>
+    </div>
+  </header>
+
+  <!-- SCROLLING PROMO STRIP -->
+  <div class="strip">
+    <p>Free delivery on orders above ₹999 &nbsp;•&nbsp; Festive sale: up to 50% off &nbsp;•&nbsp; Easy 7-day returns</p>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Everyday finds, priced to make you grin.</h1>
+        <p>Gadgets, fashion, home and fun little extras, hand-picked and delivered to your door.</p>
+        <a href="#shop" class="btn">Start shopping</a>
+        <a href="#deals" class="btn light">See deals</a>
+      </div>
+      <div class="tag-art">
+        <div class="sticker">Up to<br>50% off</div>
+        <div class="big-emoji">🛍️</div>
+        <h2>This week's picks</h2>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap" id="shop">
+
+    <!-- CATEGORIES -->
+    <h2 class="section-title">Shop by category</h2>
+    <div class="chips">
+      <a href="#" class="chip active">All</a>
+      <a href="#" class="chip">Electronics</a>
+      <a href="#" class="chip">Fashion</a>
+      <a href="#" class="chip">Home</a>
+      <a href="#" class="chip">Sports</a>
+      <a href="#" class="chip">Toys</a>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <h2 class="section-title">Trending now</h2>
+    <div class="grid">
+
+      <div class="card">
+        <div class="pic bg1"><span class="badge">-30%</span>🎧</div>
+        <div class="info">
+          <span class="category">Electronics</span>
+          <h3>Wireless Headphones</h3>
+          <p class="desc">Soft ear cushions and 30 hours of battery life.</p>
+          <div class="stars">★★★★☆ <small>4.5 (1,240)</small></div>
+          <div class="price-row"><span class="price">₹1,749</span><span class="old-price">₹2,499</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg2"><span class="badge">-20%</span>👟</div>
+        <div class="info">
+          <span class="category">Sports</span>
+          <h3>Cloud Running Shoes</h3>
+          <p class="desc">Light, breathable and cushioned for long runs.</p>
+          <div class="stars">★★★★★ <small>4.8 (860)</small></div>
+          <div class="price-row"><span class="price">₹2,399</span><span class="old-price">₹2,999</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg3"><span class="badge">-45%</span>⌚</div>
+        <div class="info">
+          <span class="category">Electronics</span>
+          <h3>Smart Watch Lite</h3>
+          <p class="desc">Tracks steps, sleep and heart rate. Water resistant.</p>
+          <div class="stars">★★★★☆ <small>4.2 (2,015)</small></div>
+          <div class="price-row"><span class="price">₹1,649</span><span class="old-price">₹2,999</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg4"><span class="badge">-15%</span>🎒</div>
+        <div class="info">
+          <span class="category">Fashion</span>
+          <h3>City Backpack</h3>
+          <p class="desc">Fits a 15-inch laptop, with a hidden zip pocket.</p>
+          <div class="stars">★★★★☆ <small>4.4 (530)</small></div>
+          <div class="price-row"><span class="price">₹1,274</span><span class="old-price">₹1,499</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg2"><span class="badge">-25%</span>☕</div>
+        <div class="info">
+          <span class="category">Home</span>
+          <h3>Ceramic Mug Set</h3>
+          <p class="desc">Set of 4 hand-glazed mugs. Microwave safe.</p>
+          <div class="stars">★★★★★ <small>4.9 (310)</small></div>
+          <div class="price-row"><span class="price">₹749</span><span class="old-price">₹999</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg1"><span class="badge">-10%</span>🕶️</div>
+        <div class="info">
+          <span class="category">Fashion</span>
+          <h3>Retro Sunglasses</h3>
+          <p class="desc">UV-protected lenses in a lightweight frame.</p>
+          <div class="stars">★★★☆☆ <small>3.9 (420)</small></div>
+          <div class="price-row"><span class="price">₹539</span><span class="old-price">₹599</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg3"><span class="badge">-35%</span>🧸</div>
+        <div class="info">
+          <span class="category">Toys</span>
+          <h3>Cuddle Bear</h3>
+          <p class="desc">Super-soft and washable. Perfect for gifting.</p>
+          <div class="stars">★★★★★ <small>4.7 (975)</small></div>
+          <div class="price-row"><span class="price">₹649</span><span class="old-price">₹999</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="pic bg4"><span class="badge">-40%</span>💡</div>
+        <div class="info">
+          <span class="category">Home</span>
+          <h3>Mood Desk Lamp</h3>
+          <p class="desc">Three light colors with touch dimming.</p>
+          <div class="stars">★★★★☆ <small>4.3 (680)</small></div>
+          <div class="price-row"><span class="price">₹899</span><span class="old-price">₹1,499</span></div>
+          <button class="buy">Add to cart</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PROMO BANNERS -->
+    <section class="banners" id="deals">
+      <div class="banner b1">
+        <h2>Festive Sale<br>Flat 50% off</h2>
+        <p>On fashion and accessories. Ends Sunday.</p>
+        <a href="#" class="btn">Grab the deal</a>
+      </div>
+      <div class="banner b2">
+        <h2>New here?<br>Get ₹200 off</h2>
+        <p>Use code <strong>HELLO200</strong> on your first order.</p>
+        <a href="#" class="btn">Sign up</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">Pocket<span style="color:#ffb400">Bazaar</span></div>
+    <p>Made with HTML and CSS. © 2026 Pocket Bazaar</p>
+  </footer>
+
+</body>
+</html>

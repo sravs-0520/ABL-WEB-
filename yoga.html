@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stillwater Yoga – Yoga and Meditation Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== 1. COLORS & BASICS ========== */
+    /* Change these colors to restyle the whole site */
+    :root {
+      --night: #2b2a4c;    /* deep indigo for text */
+      --dusk: #ece7f6;     /* soft lavender background */
+      --sage: #a9cdb3;     /* calm green */
+      --peach: #f7cdb5;    /* warm accent */
+      --lake: #7fb0be;     /* water blue */
+      --white: #fdfcff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Figtree", Arial, sans-serif;
+      background: var(--dusk);
+      color: var(--night);
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+    h1, h2, h3, .logo { font-family: "Fraunces", Georgia, serif; line-height: 1.2; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible, .btn:focus-visible { outline: 3px solid var(--night); outline-offset: 3px; }
+
+    .wrap { max-width: 1050px; margin: 0 auto; padding: 0 22px; }
+    section { padding: 64px 0; }
+    .title { font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 8px; }
+    .sub { max-width: 520px; margin-bottom: 32px; }
+
+    .btn {
+      display: inline-block;
+      background: var(--night);
+      color: var(--white);
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #46447a; }
+    .btn.soft { background: var(--peach); color: var(--night); }
+    .btn.soft:hover { background: #f2b999; }
+
+    /* ========== 2. NAVIGATION ========== */
+    .nav { background: rgba(253, 252, 255, 0.92); position: sticky; top: 0; z-index: 10; }
+    .nav .wrap { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; padding-bottom: 14px; }
+    .logo { font-size: 1.4rem; font-weight: 700; }
+    .nav ul { display: flex; gap: 24px; list-style: none; font-weight: 500; }
+    .nav ul a:hover { text-decoration: underline; text-underline-offset: 6px; }
+
+    /* ========== 3. HERO WITH BREATHING CIRCLE ========== */
+    .hero .wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+    .hero h1 { font-size: clamp(2.3rem, 6vw, 3.8rem); }
+    .hero p { margin: 16px 0 26px; max-width: 440px; }
+
+    .breath-box { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; }
+    .breath {
+      width: 60%; aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, var(--peach), var(--lake));
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Fraunces", serif;
+      font-size: 1.5rem;
+      color: var(--white);
+      box-shadow: 0 0 0 20px rgba(127, 176, 190, 0.25), 0 0 0 50px rgba(127, 176, 190, 0.12);
+      animation: breathe 8s ease-in-out infinite;   /* 4s in, 4s out */
+    }
+    @keyframes breathe { 50% { transform: scale(1.3); } }
+
+    /* ========== 4. POSE GALLERY (ARCH WINDOWS) ========== */
+    .gallery-section { background: var(--white); }
+    .strip {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;   /* cards snap into place as you swipe */
+      padding: 10px 22px 28px;
+      max-width: 1050px;
+      margin: 0 auto;
+    }
+    .arch {
+      flex: 0 0 230px;
+      scroll-snap-align: center;
+      border-radius: 115px 115px 22px 22px;   /* the arch window shape */
+      padding: 34px 20px 24px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .arch:hover { transform: translateY(-10px); }
+    .arch .art {
+      font-size: 5rem;
+      width: 140px; height: 140px;
+      margin: 0 auto 14px;
+      background: rgba(255, 255, 255, 0.55);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .arch h3 { font-size: 1.3rem; }
+    .arch .when { font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+    .arch p { font-size: 0.95rem; line-height: 1.5; }
+
+    /* Sky colors: sunrise to night, one per card */
+    .c1 { background: linear-gradient(#ffd9c2, #f9b9a5); }
+    .c2 { background: linear-gradient(#ffeebd, #cfe6b6); }
+    .c3 { background: linear-gradient(#d4ecf2, #9fcad6); }
+    .c4 { background: linear-gradient(#e8d2f0, #c3a8dd); }
+    .c5 { background: linear-gradient(#c4c4ea, #8f8fcc); }
+    .c6 { background: linear-gradient(#9ea0d6, #5f61a8); color: var(--white); }
+
+    .hint { text-align: center; font-size: 0.9rem; margin-top: 4px; }
+
+    /* ========== 5. MEDITATION TECHNIQUES ========== */
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .card { background: var(--white); border-radius: 22px; padding: 26px; }
+    .card .icon { font-size: 2.2rem; }
+    .card h3 { font-size: 1.25rem; margin: 6px 0; }
+    .tag { display: inline-block; background: var(--sage); border-radius: 999px; padding: 2px 14px; font-size: 0.85rem; font-weight: 700; margin-top: 8px; }
+
+    /* ========== 6. INSTRUCTORS ========== */
+    .teacher { text-align: center; }
+    .teacher .face {
+      width: 120px; height: 120px; border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3.4rem;
+    }
+    .teacher p { font-size: 0.95rem; }
+    .role { font-weight: 700; color: #5d5b94; }
+
+    /* ========== 7. CLASS SCHEDULE ========== */
+    .table-box { overflow-x: auto; background: var(--white); border-radius: 22px; padding: 10px 20px; }
+    table { width: 100%; border-collapse: collapse; min-width: 560px; }
+    th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid #e3def0; }
+    th { font-family: "Fraunces", serif; }
+    tr:last-child td { border-bottom: none; }
+
+    /* ========== 8. MEMBERSHIP PLANS ========== */
+    .plans { align-items: stretch; }
+    .plan { background: var(--white); border-radius: 22px; padding: 30px 26px; text-align: center; display: flex; flex-direction: column; }
+    .plan.best { background: var(--night); color: var(--white); transform: scale(1.04); }
+    .plan .price { font-family: "Fraunces", serif; font-size: 2.4rem; margin: 6px 0; }
+    .plan .price small { font-size: 1rem; font-family: "Figtree", sans-serif; }
+    .plan ul { list-style: none; margin: 10px 0 20px; flex: 1; }
+    .plan li { padding: 4px 0; }
+
+    /* ========== 9. ARTICLES ========== */
+    .article { background: var(--white); border-radius: 22px; overflow: hidden; }
+    .article .cover { height: 120px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    .article .body { padding: 20px 22px 24px; }
+    .article h3 { font-size: 1.2rem; margin-bottom: 6px; }
+    .article .read { font-weight: 700; font-size: 0.9rem; }
+
+    /* ========== 10. FOOTER ========== */
+    footer { background: var(--night); color: var(--dusk); text-align: center; padding: 40px 22px; }
+    footer .logo { color: var(--white); margin-bottom: 8px; }
+
+    /* ========== 11. MOBILE SCREENS ========== */
+    @media (max-width: 780px) {
+      .nav ul { display: none; }
+      .hero .wrap, .cards { grid-template-columns: 1fr; }
+      .breath-box { max-width: 260px; margin: 0 auto; }
+      .plan.best { transform: none; }
+      section { padding: 48px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .breath { animation: none; }
+      html { scroll-behavior: auto; }
+      .arch { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="wrap">
+      <a href="#" class="logo">Stillwater Yoga</a>
+      <ul>
+        <li><a href="#poses">Poses</a></li>
+        <li><a href="#meditate">Meditation</a></li>
+        <li><a href="#teachers">Teachers</a></li>
+        <li><a href="#classes">Classes</a></li>
+        <li><a href="#join">Membership</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" style="padding: 56px 0 40px;">
+    <div class="wrap">
+      <div>
+        <h1>Slow down. Breathe. Come back to yourself.</h1>
+        <p>Yoga and meditation classes for every level, in a quiet studio that feels like a deep breath.</p>
+        <a href="#classes" class="btn">Book a class</a>
+        <a href="#join" class="btn soft">See plans</a>
+      </div>
+      <div class="breath-box"><div class="breath">Breathe</div></div>
+    </div>
+  </header>
+
+  <!-- POSE GALLERY -->
+  <section class="gallery-section" id="poses">
+    <div class="wrap">
+      <h2 class="title">Flow through the day</h2>
+      <p class="sub">Six poses, each matched to a time of day. Swipe or scroll sideways to explore.</p>
+    </div>
+
+    <div class="strip" tabindex="0" aria-label="Yoga poses gallery">
+      <div class="arch c1">
+        <div class="art">🌄</div>
+        <h3>Mountain Pose</h3>
+        <div class="when">Sunrise</div>
+        <p>Stand tall and steady. Improves posture and wakes up the body.</p>
+      </div>
+      <div class="arch c2">
+        <div class="art">🌳</div>
+        <h3>Tree Pose</h3>
+        <div class="when">Morning</div>
+        <p>Balance on one leg. Builds focus and strengthens the ankles.</p>
+      </div>
+      <div class="arch c3">
+        <div class="art">🐕</div>
+        <h3>Downward Dog</h3>
+        <div class="when">Midday</div>
+        <p>Stretches the spine and hamstrings. Clears the head.</p>
+      </div>
+      <div class="arch c4">
+        <div class="art">🐈</div>
+        <h3>Cat-Cow</h3>
+        <div class="when">Afternoon</div>
+        <p>Gentle spine waves that ease back tension from sitting.</p>
+      </div>
+      <div class="arch c5">
+        <div class="art">🪷</div>
+        <h3>Lotus Pose</h3>
+        <div class="when">Dusk</div>
+        <p>Sit cross-legged and settle. Ideal for meditation.</p>
+      </div>
+      <div class="arch c6">
+        <div class="art">🌙</div>
+        <h3>Child's Pose</h3>
+        <div class="when">Night</div>
+        <p>Rest forward and let go. Calms the mind before sleep.</p>
+      </div>
+    </div>
+    <p class="hint">← Swipe to see more →</p>
+  </section>
+
+  <!-- MEDITATION TECHNIQUES -->
+  <section id="meditate">
+    <div class="wrap">
+      <h2 class="title">Meditation techniques</h2>
+      <p class="sub">New to meditation? Start with any of these. No experience needed.</p>
+      <div class="cards">
+        <div class="card">
+          <div class="icon">🌬️</div>
+          <h3>Breath focus</h3>
+          <p>Sit comfortably and follow each breath in and out. When your mind wanders, gently return.</p>
+          <span class="tag">5 minutes</span>
+        </div>
+        <div class="card">
+          <div class="icon">🫶</div>
+          <h3>Body scan</h3>
+          <p>Move your attention slowly from head to toe, noticing and softening each part.</p>
+          <span class="tag">15 minutes</span>
+        </div>
+        <div class="card">
+          <div class="icon">🔔</div>
+          <h3>Sound meditation</h3>
+          <p>Listen to singing bowls and let the sound carry your thoughts away.</p>
+          <span class="tag">20 minutes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUCTORS -->
+  <section id="teachers" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="title">Meet your teachers</h2>
+      <p class="sub">Certified, kind and endlessly patient.</p>
+      <div class="cards">
+        <div class="teacher">
+          <div class="face" style="background: var(--peach);">🧘‍♀️</div>
+          <h3>Anika Rao</h3>
+          <div class="role">Hatha and Vinyasa</div>
+          <p>12 years of teaching. Her classes are slow, strong and full of humor.</p>
+        </div>
+        <div class="teacher">
+          <div class="face" style="background: var(--sage);">🧘‍♂️</div>
+          <h3>Daniel Fernandes</h3>
+          <div class="role">Meditation and breathwork</div>
+          <p>Trained in mindfulness for 9 years. He makes stillness feel easy.</p>
+        </div>
+        <div class="teacher">
+          <div class="face" style="background: var(--lake);">🧘</div>
+          <h3>Meera Joshi</h3>
+          <div class="role">Yin and restorative</div>
+          <p>Specialises in deep rest for tired bodies and busy minds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLASS SCHEDULE -->
+  <section id="classes" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="title">Class schedule</h2>
+      <p class="sub">Every class is 60 minutes. Mats and blocks are provided.</p>
+      <div class="table-box">
+        <table>
+          <tr><th>Time</th><th>Class</th><th>Teacher</th><th>Days</th></tr>
+          <tr><td>6:00 am</td><td>Sunrise Vinyasa</td><td>Anika Rao</td><td>Mon, Wed, Fri</td></tr>
+          <tr><td>8:00 am</td><td>Breath and Meditation</td><td>Daniel Fernandes</td><td>Tue, Thu, Sat</td></tr>
+          <tr><td>12:30 pm</td><td>Lunch-break Stretch</td><td>Anika Rao</td><td>Mon – Fri</td></tr>
+          <tr><td>6:30 pm</td><td>Hatha Flow</td><td>Anika Rao</td><td>Mon, Wed</td></tr>
+          <tr><td>8:00 pm</td><td>Yin and Sleep</td><td>Meera Joshi</td><td>Tue, Thu, Sun</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIP PLANS -->
+  <section id="join" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="title">Membership plans</h2>
+      <p class="sub">Pick what fits your routine. Your first class is free.</p>
+      <div class="cards plans">
+        <div class="plan">
+          <h3>Drop-in</h3>
+          <div class="price">₹400 <small>/ class</small></div>
+          <ul><li>Any single class</li><li>Mat provided</li><li>No commitment</li></ul>
+          <a href="#" class="btn soft">Book now</a>
+        </div>
+        <div class="plan best">
+          <h3>Monthly</h3>
+          <div class="price">₹2,500 <small>/ month</small></div>
+          <ul><li>Unlimited classes</li><li>1 guest pass a month</li><li>Free meditation workshops</li></ul>
+          <a href="#" class="btn soft">Join monthly</a>
+        </div>
+        <div class="plan">
+          <h3>Annual</h3>
+          <div class="price">₹22,000 <small>/ year</small></div>
+          <ul><li>Everything in Monthly</li><li>2 months free</li><li>Priority booking</li></ul>
+          <a href="#" class="btn soft">Join yearly</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLES -->
+  <section style="padding-top:0">
+    <div class="wrap">
+      <h2 class="title">From the journal</h2>
+      <p class="sub">Short reads for a calmer week.</p>
+      <div class="cards">
+        <div class="article">
+          <div class="cover" style="background: var(--sage);">🌿</div>
+          <div class="body">
+            <h3>5 minutes of morning stretching</h3>
+            <p>A simple routine to start the day with a loose body and a quiet mind.</p>
+            <a href="#" class="read">Read article</a>
+          </div>
+        </div>
+        <div class="article">
+          <div class="cover" style="background: var(--peach);">😴</div>
+          <div class="body">
+            <h3>Yoga for better sleep</h3>
+            <p>Three gentle poses to practise before bed, and why they help you drift off.</p>
+            <a href="#" class="read">Read article</a>
+          </div>
+        </div>
+        <div class="article">
+          <div class="cover" style="background: var(--lake);">🧠</div>
+          <div class="body">
+            <h3>Why meditation feels hard</h3>
+            <p>Your wandering mind is normal. Here is how beginners can stay with it.</p>
+            <a href="#" class="read">Read article</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo">Stillwater Yoga</div>
+    <p>12 Lotus Lane, Your City · +91 98765 43210 · hello@stillwateryoga.com</p>
+    <p>© 2026 Stillwater Yoga. Breathe easy.</p>
+  </footer>
+
+</body>
+</html>
