@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crumb &amp; Cherry – Bakery and Cake Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========== 1. COLORS & BASICS ========== */
+    /* Change these colors to restyle the whole site */
+    :root {
+      --cocoa: #3b1f26;     /* dark brown for text */
+      --cherry: #d6336c;    /* main pink-red */
+      --blush: #ffe3ea;     /* page background */
+      --butter: #ffe08a;    /* yellow */
+      --pistachio: #cde8b8; /* soft green */
+      --white: #fffdf9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Nunito", Arial, sans-serif;
+      background: var(--blush);
+      color: var(--cocoa);
+      line-height: 1.6;
+    }
+    h1, h2, h3, .logo { font-family: "Bagel Fat One", Georgia, serif; font-weight: 400; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1050px; margin: 0 auto; padding: 0 20px; }
+    section { padding: 56px 0; }
+    .title { font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--cherry); margin-bottom: 8px; }
+    .sub { margin-bottom: 30px; max-width: 520px; }
+
+    .btn {
+      display: inline-block;
+      background: var(--cherry);
+      color: var(--white);
+      padding: 13px 28px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 3px solid var(--cocoa);
+      box-shadow: 4px 4px 0 var(--cocoa);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--cocoa); }
+    .btn.yellow { background: var(--butter); color: var(--cocoa); }
+
+    /* ========== 2. NAVIGATION ========== */
+    .nav { background: var(--white); border-bottom: 3px solid var(--cocoa); position: sticky; top: 0; z-index: 10; }
+    .nav .wrap { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; padding-bottom: 12px; }
+    .logo { font-size: 1.6rem; color: var(--cherry); }
+    .nav ul { display: flex; gap: 22px; list-style: none; font-weight: 800; }
+    .nav ul a:hover { color: var(--cherry); }
+
+    /* ========== 3. HERO ========== */
+    .hero { padding: 50px 0 60px; }
+    .hero .wrap { display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; align-items: center; }
+    .hero h1 { font-size: clamp(2.4rem, 7vw, 4.4rem); line-height: 1.05; }
+    .hero p { margin: 16px 0 26px; font-size: 1.15rem; max-width: 440px; }
+
+    .hero-cake {
+      background: var(--butter);
+      border: 3px solid var(--cocoa);
+      border-radius: 50% 50% 46% 54% / 56% 48% 52% 44%;  /* soft blob shape */
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(7rem, 18vw, 11rem);
+      box-shadow: 8px 8px 0 var(--cherry);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 50% { transform: translateY(-12px) rotate(3deg); } }
+
+    /* ========== 4. THE DISPLAY CASE (GALLERY) ========== */
+    .case-section { background: var(--cocoa); color: var(--white); }
+    .case-section .title { color: var(--butter); }
+
+    .case {
+      background: rgba(255, 255, 255, 0.08);
+      border: 3px solid var(--butter);
+      border-radius: 28px;
+      padding: 10px 24px 0;
+    }
+    .shelf { padding: 26px 0 0; }
+    .shelf h3 { color: var(--pistachio); font-size: 1.3rem; margin-bottom: 4px; }
+
+    .items { display: flex; flex-wrap: wrap; gap: 28px; padding: 40px 0 0; }
+
+    /* The shelf board under each row of treats */
+    .shelf::after {
+      content: "";
+      display: block;
+      height: 14px;
+      background: linear-gradient(var(--butter), #e0b84f);
+      border-radius: 8px;
+      margin-top: -6px;
+    }
+
+    .item { width: 150px; text-align: center; position: relative; cursor: pointer; }
+
+    /* Round plate */
+    .plate {
+      width: 130px; height: 130px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, var(--blush) 70%);
+      border: 3px solid var(--cherry);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+      transition: transform 0.25s;
+    }
+    .item:hover .plate { transform: translateY(-14px) rotate(-8deg) scale(1.1); }
+
+    .item .name { font-weight: 800; margin-top: 8px; line-height: 1.2; }
+    .item .price { color: var(--butter); font-weight: 800; }
+
+    /* Speech bubble that pops up on hover */
+    .bubble {
+      position: absolute;
+      bottom: 100%; left: 50%;
+      transform: translate(-50%, 8px);
+      width: 170px;
+      background: var(--butter);
+      color: var(--cocoa);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-radius: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 2;
+    }
+    .item:hover .bubble { opacity: 1; transform: translate(-50%, -2px); }
+
+    .pick {
+      position: absolute; top: -6px; right: 4px;
+      background: var(--cherry); color: var(--white);
+      font-size: 0.75rem; font-weight: 800;
+      padding: 3px 9px; border-radius: 999px;
+      transform: rotate(10deg);
+      z-index: 1;
+    }
+
+    /* ========== 5. CUSTOM CAKE DESIGNER ========== */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .step {
+      background: var(--white);
+      border: 3px solid var(--cocoa);
+      border-radius: 22px;
+      padding: 24px;
+    }
+    .step h3 { font-size: 1.3rem; margin-bottom: 10px; }
+    .step .num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--cherry); color: var(--white);
+      margin-right: 8px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { background: var(--pistachio); padding: 4px 14px; border-radius: 999px; font-weight: 600; font-size: 0.92rem; }
+    .step p.note { margin-top: 12px; font-size: 0.9rem; }
+
+    /* ========== 6. SEASONAL OFFERS ========== */
+    .offers { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .offer {
+      border: 3px solid var(--cocoa);
+      border-radius: 26px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .offer.o1 { background: var(--cherry); color: var(--white); }
+    .offer.o2 { background: var(--pistachio); }
+    .offer h3 { font-size: 1.8rem; line-height: 1.1; margin-bottom: 8px; }
+    .offer .big { position: absolute; right: 14px; bottom: -10px; font-size: 6rem; opacity: 0.9; }
+    .offer p { max-width: 70%; margin-bottom: 14px; }
+    .offer.o1 .btn { background: var(--butter); color: var(--cocoa); }
+
+    /* ========== 7. CONTACT ========== */
+    .contact { background: var(--white); border-top: 3px solid var(--cocoa); }
+    .contact .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .contact h3 { color: var(--cherry); font-size: 1.3rem; margin-bottom: 6px; }
+    .hours { list-style: none; }
+    .hours li { display: flex; justify-content: space-between; max-width: 240px; border-bottom: 1px dashed #c9a9b0; padding: 3px 0; }
+
+    footer { background: var(--cocoa); color: var(--blush); text-align: center; padding: 20px; font-size: 0.9rem; }
+
+    /* ========== 8. MOBILE SCREENS ========== */
+    @media (max-width: 780px) {
+      .nav ul { display: none; }
+      .hero .wrap, .steps, .offers, .contact .wrap { grid-template-columns: 1fr; }
+      .hero-cake { max-width: 280px; margin: 0 auto; }
+      .offer p { max-width: 100%; }
+      .items { justify-content: center; }
+      .bubble { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-cake { animation: none; }
+      .plate, .bubble { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+    <div class="wrap">
+      <a href="#" class="logo">Crumb &amp; Cherry</a>
+      <ul>
+        <li><a href="#treats">Treats</a></li>
+        <li><a href="#custom">Custom cakes</a></li>
+        <li><a href="#offers">Offers</a></li>
+        <li><a href="#visit">Visit us</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Baked at 4 a.m.<br>Gone by noon.</h1>
+        <p>Cakes, flaky pastries and cookies still warm from the oven. Order for today or design a cake for your big day.</p>
+        <a href="#treats" class="btn">See today's bakes</a>
+      </div>
+      <div class="hero-cake">🎂</div>
+    </div>
+  </header>
+
+  <!-- DISPLAY CASE GALLERY -->
+  <section class="case-section" id="treats">
+    <div class="wrap">
+      <h2 class="title">Today's display case</h2>
+      <p class="sub">Hover over any treat to lift it off the plate and see what's inside.</p>
+
+      <div class="case">
+
+        <div class="shelf">
+          <h3>Cakes</h3>
+          <div class="items">
+            <div class="item">
+              <span class="pick">Chef's pick</span>
+              <div class="bubble">Three layers of dark chocolate sponge with silky ganache.</div>
+              <div class="plate">🍫</div>
+              <div class="name">Choco Fudge Cake</div>
+              <div class="price">₹650 / half kg</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Soft vanilla sponge, fresh cream and juicy strawberries.</div>
+              <div class="plate">🍰</div>
+              <div class="name">Strawberry Slice</div>
+              <div class="price">₹120 / slice</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Moist and tangy, topped with a swirl of cream cheese frosting.</div>
+              <div class="plate">🎂</div>
+              <div class="name">Red Velvet Cake</div>
+              <div class="price">₹750 / half kg</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Light sponge with a golden caramel glaze.</div>
+              <div class="plate">🥮</div>
+              <div class="name">Caramel Delight</div>
+              <div class="price">₹90 / piece</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shelf">
+          <h3>Pastries</h3>
+          <div class="items">
+            <div class="item">
+              <span class="pick">Best seller</span>
+              <div class="bubble">Golden, buttery layers that crackle when you bite.</div>
+              <div class="plate">🥐</div>
+              <div class="name">Butter Croissant</div>
+              <div class="price">₹80</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Vanilla cream in a tiny sponge, topped with a cherry.</div>
+              <div class="plate">🧁</div>
+              <div class="name">Cherry Cupcake</div>
+              <div class="price">₹70</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Flaky crust filled with spiced cinnamon apples.</div>
+              <div class="plate">🥧</div>
+              <div class="name">Apple Pie</div>
+              <div class="price">₹110</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Soft ring doughnut with a sugar glaze.</div>
+              <div class="plate">🍩</div>
+              <div class="name">Glazed Doughnut</div>
+              <div class="price">₹60</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shelf">
+          <h3>Cookies</h3>
+          <div class="items">
+            <div class="item">
+              <div class="bubble">Crisp edges, gooey middle and big chocolate chunks.</div>
+              <div class="plate">🍪</div>
+              <div class="name">Choco Chunk Cookies</div>
+              <div class="price">₹180 / box of 6</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Crunchy cashew butter cookies, made without maida.</div>
+              <div class="plate">🥜</div>
+              <div class="name">Cashew Crunch</div>
+              <div class="price">₹220 / box of 6</div>
+            </div>
+            <div class="item">
+              <div class="bubble">Oats, jaggery and raisins in every bite.</div>
+              <div class="plate">🌾</div>
+              <div class="name">Oat &amp; Jaggery</div>
+              <div class="price">₹160 / box of 6</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOM CAKES -->
+  <section id="custom">
+    <div class="wrap">
+      <h2 class="title">Design your own cake</h2>
+      <p class="sub">Birthdays, weddings or just because. Tell us your idea and we will bake it.</p>
+
+      <div class="steps">
+        <div class="step">
+          <h3><span class="num">1</span>Pick a flavor</h3>
+          <div class="pills">
+            <span class="pill">Chocolate</span><span class="pill">Vanilla</span>
+            <span class="pill">Red velvet</span><span class="pill">Butterscotch</span>
+            <span class="pill">Pineapple</span>
+          </div>
+          <p class="note">Starts at ₹550 per half kg.</p>
+        </div>
+        <div class="step">
+          <h3><span class="num">2</span>Choose a style</h3>
+          <div class="pills">
+            <span class="pill">Photo cake</span><span class="pill">Tiered</span>
+            <span class="pill">Fondant figures</span><span class="pill">Floral</span>
+            <span class="pill">Cartoon</span>
+          </div>
+          <p class="note">Design charges from ₹200.</p>
+        </div>
+        <div class="step">
+          <h3><span class="num">3</span>Place your order</h3>
+          <p>Call or message us at least 2 days before. For weddings and tiered cakes, order a week ahead.</p>
+          <p class="note"><a href="#visit" class="btn yellow" style="padding:8px 20px;">Contact us</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEASONAL OFFERS -->
+  <section id="offers" style="padding-top:0">
+    <div class="wrap">
+      <h2 class="title">Seasonal offers</h2>
+      <p class="sub">Limited-time treats while the season lasts.</p>
+
+      <div class="offers">
+        <div class="offer o1">
+          <h3>Festive Sweet Box<br>Flat 20% off</h3>
+          <p>A gift box of 12 cookies, brownies and mini cakes. Order before the festival rush.</p>
+          <a href="#visit" class="btn">Reserve a box</a>
+          <span class="big">🎁</span>
+        </div>
+        <div class="offer o2">
+          <h3>Christmas Plum Cake<br>Pre-order now</h3>
+          <p>Slow-soaked in fruit juice for weeks. Book early, we bake a limited number.</p>
+          <a href="#visit" class="btn yellow">Pre-order</a>
+          <span class="big">🎄</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="visit">
+    <div class="wrap">
+      <div>
+        <h3>Find us</h3>
+        <p>Crumb &amp; Cherry Bakery<br>12 Baker Street, Main Market<br>Your City – 500001</p>
+      </div>
+      <div>
+        <h3>Opening hours</h3>
+        <ul class="hours">
+          <li><span>Mon – Fri</span><span>7 am – 9 pm</span></li>
+          <li><span>Saturday</span><span>7 am – 10 pm</span></li>
+          <li><span>Sunday</span><span>8 am – 10 pm</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Say hello</h3>
+        <p>Phone: +91 98765 43210<br>Email: hello@crumbandcherry.com<br>Free delivery within 5 km on orders above ₹500.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Crumb &amp; Cherry. Baked with love, and a little too much butter.</footer>
+
+</body>
+</html>
